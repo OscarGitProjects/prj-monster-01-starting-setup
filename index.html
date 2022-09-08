@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vue Basics</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Jost:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://unpkg.com/vue@next" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <h1>Monster Slayer</h1>
+    </header>
+    <div id="game">
+      <section id="monster" class="container">
+        <h2>Monster Health</h2>
+        <div class="healthbar">
+          <div
+            class="healthbar__value"
+            v-bind:style="monsterHealthBarStyle"
+          ></div>
+        </div>
+      </section>
+      <section id="player" class="container">
+        <h2>Your Health</h2>
+        <div class="healthbar">
+          <div
+            class="healthbar__value"
+            v-bind:style="playerHealthBarStyle"
+          ></div>
+        </div>
+      </section>
+      <section class="container" v-if="winner >= 0">
+        <h2>Game over!</h2>
+        <h3 v-if="winner === 1">You lost!</h3>
+        <h3 v-else-if="winner === 2">You won!</h3>
+        <h3 v-else-if="winner === 0">It's a draw!</h3>
+        <button id="newGameButton" v-on:click="onClickNewGameButtonHandler()">
+          Start new game
+        </button>
+      </section>
+      <section id="controls" v-else>
+        <button id="attackButton" v-on:click="onClickAttackButtonHandler()">
+          ATTACK
+        </button>
+        <button
+          id="specialAttackButton"
+          v-on:click="onClickSpecialAttackButtonHandler()"
+          v-bind:disabled="isSpecialAttackButtonDisabled"
+        >
+          SPECIAL ATTACK
+        </button>
+        <button id="healButton" v-on:click="onClickHealButtonHandler()">
+          HEAL
+        </button>
+        <button
+          id="surrenderButton"
+          v-on:click="onClickSurrenderButtonHandler()"
+        >
+          SURRENDER
+        </button>
+      </section>
+      <section id="log" class="container">
+        <h2>Battle Log</h2>
+        <ul>
+          <li v-for="msg in logMessages">
+            <span v-bind:class="actorClass(msg.actionBy)"
+              >{{firstToUpperCase(msg.actionBy)}}</span
+            >
+            <span v-if="msg.actionType === 'heal'">
+              heals himself with
+              <span class="log--heal">{{msg.actionValue}}</span></span
+            >
+            <span v-else-if="msg.actionType === 'surrender'">
+              {{}} {{msg.actionType}}</span
+            >
+            <span v-else
+              >{{}} {{msg.actionType}} and deal
+              <span class="log--damage">{{msg.actionValue}}</span></span
+            >
+          </li>
+        </ul>
+      </section>
+    </div>
+  </body>
+</html>
